@@ -1,5 +1,6 @@
 //
 require('dotenv').config()
+require("./config/mongoose")
 const express = require('express')
 const session = require('express-session')
 const app = express()
@@ -8,9 +9,10 @@ const router = require('./routes/index')
 //
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  resave: false
+  resave: false,
+  saveUninitialized:false
 }))
-app.use(express.urlencoded())
+app.use(express.urlencoded({extended:true}))
 app.use('/', router)
 app.listen(port, () => {
   console.log(`http://localhost:${port}`)
