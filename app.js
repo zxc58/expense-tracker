@@ -12,7 +12,6 @@ app.use(session({
 }))
 app.use(express.urlencoded())
 app.use('/', router)
-//
 app.listen(port, () => {
   console.log(`http://localhost:${port}`)
 })
