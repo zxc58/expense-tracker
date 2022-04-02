@@ -13,6 +13,7 @@ app.use(session({
   saveUninitialized:false
 }))
 app.use(express.urlencoded({extended:true}))
+app.use(methodOverride('_method'))
 app.use('/', router)
 app.listen(port, () => {
   console.log(`http://localhost:${port}`)
