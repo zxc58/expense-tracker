@@ -2,7 +2,13 @@
 
 //
 module.exports = {
-  validationGuard: (req, res, next) => {
+  userValidationGuard: (req, res, next) => {
+    const { body: { name, password } } = req
+    // 這邊驗證資料格式是否正確
+    req.newUser = { name, password }
+    next()
+  },
+  recordValidationGuard: (req, res, next) => {
     const userId = req.user._id
     const { body: { name, amount, date, categoryId } } = req
     // 這邊驗證資料格式是否正確
