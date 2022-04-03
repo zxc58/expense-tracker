@@ -2,6 +2,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/user')
+const bcrypt=require("bcryptjs")
 //
 function usePassport (app) {
   app.use(passport.initialize())
@@ -10,10 +11,11 @@ function usePassport (app) {
   passport.use(new LocalStrategy({ usernameField: 'name' },
     async (name, password, done) => {
       try {
-        const result = await User.findOne({ name })
-        if (!result) { return done(null, false) }
-        if (result.password !== password) { return done(null, false) }
-        return done(null, result)
+        const searchDbResult = await User.findOne({ name })
+        if (!searchDbResult) { return done(null, false) }
+        const passwordCompareResult = await bcrypt.compare(password,searchDbResult.password)
+        if (!passwordCompareResult) { return done(null, false) }
+        return done(null, searchDbResult)
       } catch (error) {
         console.log(error)
       }
