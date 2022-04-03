@@ -9,8 +9,8 @@ router.get('/', async (req, res) => {
   // r
   try {
     const userId = req.user._id
-    const searchResults = await Record.find({ userId }).lean()//
-    res.render('home', { searchResults })
+    const searchResults = await Record.find({ userId }).lean()
+    res.send(searchResults)
   } catch (error) {
     console.log(error)
     res.redirect('/')

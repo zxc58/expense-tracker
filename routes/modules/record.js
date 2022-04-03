@@ -4,12 +4,12 @@ const router = express.Router()
 const Category = require('../../models/category')
 const User = require('../../models/user')
 const Record = require('../../models/record')
-const { validationGuard } = require('../../middleWare')
+const { recordValidationGuard } = require('../../middleWare')
 //
 router.get('/new', (req, res) => {
-  res.render('new')
+  res.send('new record page')
 })
-router.post('/', validationGuard, async (req, res) => {
+router.post('/', recordValidationGuard, async (req, res) => {
   // c
   try {
     const result = await Record.create(req.newRecord)
@@ -23,17 +23,17 @@ router.get('/:_id/edit', async (req, res) => {
   try {
     const recordId = req.params._id
     const searchResults = await Record.findById(recordId).lean()
-    res.render('edit', { searchResults })
+    res.send('edit record page ' )
   } catch (error) {
     console.log(error)
     res.redirect('/')
   }
 })
-router.put('/:_id', validationGuard, async (req, res) => {
+router.put('/:_id', recordValidationGuard, async (req, res) => {
   // u
   try {
     const recordId = req.params._id
-    const result = await Record.findByIdAndUpdate(recordId, req.newRecord)
+     await Record.findByIdAndUpdate(recordId, req.newRecord)
     res.redirect('/')
   } catch (error) {
     console.log(error)
@@ -43,7 +43,7 @@ router.delete('/:_id', async (req, res) => {
   // d
   try {
     const recordId = req.params._id
-    const result = await Record.findByIdAndDelete(recordId)
+     await Record.findByIdAndDelete(recordId)
     res.redirect('/')
   } catch (error) {
     console.log(error)
