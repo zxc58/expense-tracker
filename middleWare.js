@@ -3,9 +3,9 @@
 //
 module.exports = {
   userValidationGuard: (req, res, next) => {
-    const { body: { name, password } } = req
+    const { body: { name, password, email } } = req
     // 這邊驗證資料格式是否正確
-    req.newUser = { name, password }
+    req.newUser = { name, password, email }
     next()
   },
   recordValidationGuard: (req, res, next) => {
