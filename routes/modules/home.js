@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   // r
   try {
     const userId = req.user._id
-    const searchResults = await Record.find({ userId }).lean().sort({date:-1})
+    const searchResults = await Record.find({ userId }).populate(["userId","categoryId"]).lean().sort({date:-1})
     res.send({homePage:[req.user,searchResults]})
   } catch (error) {
     console.log(error)
