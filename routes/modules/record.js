@@ -23,7 +23,7 @@ router.get('/:_id/edit', async (req, res) => {
   try {
     const recordId = req.params._id
     const searchResults = await Record.findById(recordId).lean()
-    res.send('edit record page ' )
+    res.send('edit record page ')
   } catch (error) {
     console.log(error)
     res.redirect('/')
@@ -33,7 +33,7 @@ router.put('/:_id', recordValidationGuard, async (req, res) => {
   // u
   try {
     const recordId = req.params._id
-     await Record.findByIdAndUpdate(recordId, req.newRecord)
+    await Record.findByIdAndUpdate(recordId, req.newRecord)
     res.redirect('/')
   } catch (error) {
     console.log(error)
@@ -43,7 +43,7 @@ router.delete('/:_id', async (req, res) => {
   // d
   try {
     const recordId = req.params._id
-     await Record.findByIdAndDelete(recordId)
+    await Record.findByIdAndDelete(recordId)
     res.redirect('/')
   } catch (error) {
     console.log(error)
