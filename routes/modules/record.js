@@ -23,7 +23,7 @@ router.get('/:_id/edit', async (req, res) => {
   try {
     const recordId = req.params._id
     const searchResults = await Record.findById(recordId).lean()
-    res.send('edit record page ')
+    res.send({editRecordPage :searchResults})
   } catch (error) {
     console.log(error)
     res.redirect('/')
