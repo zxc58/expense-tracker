@@ -11,7 +11,7 @@ function usePassport (app) {
   passport.use(new LocalStrategy({ usernameField: 'email' },
     async (email, password, done) => {
       try {
-        const searchDbResult = await User.findOne({ name: email })
+        const searchDbResult = await User.findOne({  email })
         if (!searchDbResult) { return done(null, false) }
         const passwordCompareResult = await bcrypt.compare(password, searchDbResult.password)
         if (!passwordCompareResult) { return done(null, false) }
