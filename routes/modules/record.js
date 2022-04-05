@@ -7,46 +7,61 @@ const Record = require('../../models/record')
 const { recordValidationGuard } = require('../../middleWare')
 //
 router.get('/new', (req, res) => {
-  res.send('new record page')
+  return res.send('new record page')
 })
 router.post('/', recordValidationGuard, async (req, res) => {
   // c
   try {
     const result = await Record.create(req.newRecord)
-    res.redirect('/')
+    return res.redirect('/')
   } catch (error) {
     console.log(error)
+    return res.send("錯誤page")
   }
 })
 router.get('/:_id/edit', async (req, res) => {
   // u
   try {
-    const recordId = req.params._id
-    const searchResults = await Record.findById(recordId).lean()
-    res.send({editRecordPage :searchResults})
+    const _id = req.params._id
+    const userId = req.user._id
+    const searchResult = await Record.findOne({_id,userId}).lean()
+    if(!searchResult){
+      return res.send('錯誤page')
+    }
+    return res.send({editRecordPage :searchResult})
   } catch (error) {
     console.log(error)
-    res.redirect('/')
+    return res.send('錯誤page')
   }
 })
 router.put('/:_id', recordValidationGuard, async (req, res) => {
   // u
   try {
-    const recordId = req.params._id
-    await Record.findByIdAndUpdate(recordId, req.newRecord)
-    res.redirect('/')
+    const _id = req.params._id
+    const userId = req.user._id
+    const searchResult = await Record.findOneAndUpdate({_id,userId},req.newRecord)
+    if(!searchResult){
+      return res.send('錯誤page')
+    }
+    return res.redirect('/')
   } catch (error) {
     console.log(error)
+    return res.send('錯誤page')
   }
 })
 router.delete('/:_id', async (req, res) => {
   // d
   try {
-    const recordId = req.params._id
-    await Record.findByIdAndDelete(recordId)
-    res.redirect('/')
+    const _id = req.params._id
+    const userId = req.user._id
+    const searchResults = await Record.findOneAndDelete({_id,userId})
+    if(!searchResults){
+      return res.send('錯誤page')
+    }
+    return res.redirect('/')
   } catch (error) {
     console.log(error)
+    return res.send('錯誤page')
   }
 })
 //
