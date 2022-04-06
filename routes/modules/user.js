@@ -3,20 +3,24 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 const { userValidationGuard } = require('../../middleWare')
-const Category = require('../../models/category')
 const User = require('../../models/user')
-const Record = require('../../models/record')
 const bcrypt = require('bcryptjs')
+const { validationResult } = require('express-validator')
 //
 router.get('/signin', (req, res) => {
-  res.send('sign in page')
+  res.render('signin')
 })
 router.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/user/signin' }))
+
 router.get('/signup', (req, res) => {
-  res.send('sign up page')
+  res.render('signup')
 })
 router.post('/signup', userValidationGuard, async (req, res) => {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      // return res.status(400).json({ errors: errors.array() });//
+    }
     const searchResult = await User.findOne({ email: req.newUser.email })
     if (searchResult) { return res.send('name has sign up') }
     const salt = bcrypt.genSaltSync(10)

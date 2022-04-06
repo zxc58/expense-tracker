@@ -1,16 +1,20 @@
 //
 const express = require('express')
 const router = express.Router()
-const Category = require('../../models/category')
-const User = require('../../models/user')
 const Record = require('../../models/record')
+/*這行不能刪*/const Category =require("../../models/category")
 //
 router.get('/', async (req, res) => {
   // r
   try {
-    const userId = req.user._id
-    const searchResults = await Record.find({ userId }).populate(["userId","categoryId"]).lean().sort({date:-1})
-    res.send({homePage:[req.user,searchResults]})
+    const queryCondition = { userId: req.user._id }
+    if (req.query.filterByCategory&&req.query.filterByCategory!=="全部") { queryCondition.categoryId = req.query.filterByCategory }
+    const searchResults = await Record.find(queryCondition).populate(['userId', 'categoryId']).lean().sort({ date: -1 })
+    const categoryList = await Category.find().lean().sort({_id:1})
+    res.locals.searchResults = searchResults
+    res.locals.categoryList=categoryList
+    res.locals.user = req.user
+    res.render('home')
   } catch (error) {
     console.log(error)
     res.redirect('/')
