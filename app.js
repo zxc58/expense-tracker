@@ -19,6 +19,7 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 usePassport(app)
+app.use(express.static('public'))
 app.engine('.hbs', engine({extname: '.hbs'}));
 app.set('view engine', '.hbs');
 app.set('views', './views');
