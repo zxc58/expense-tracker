@@ -1,10 +1,10 @@
 {
     "categoryList":[
-        {"name":"家居物業","url": "https://fontawesome.com/icons/home?style=solid"},
-        {"name":"交通出行","url": "https://fontawesome.com/icons/shuttle-van?style=solid"},
-        {"name":"休閒娛樂","url": "https://fontawesome.com/icons/grin-beam?style=solid"},
-        {"name":"餐飲食品","url": "https://fontawesome.com/icons/utensils?style=solid"},
-        {"name":"其他","url": "https://fontawesome.com/icons/pen?style=solid"}
+        {"name":"家居物業","iconClass": "fa-solid fa-house"},
+        {"name":"交通出行","iconClass": "fa-solid fa-van-shuttle"},
+        {"name":"休閒娛樂","iconClass": "fa-solid fa-face-grin-beam"},
+        {"name":"餐飲食品","iconClass": "fa-solid fa-utensils"},
+        {"name":"其他","iconClass": "fa-solid fa-pen"}
     ],
     "userList":[
         {"name":"廣志","email":"user1@example.com","password":"12345678"},
