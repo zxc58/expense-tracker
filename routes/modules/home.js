@@ -8,12 +8,12 @@ router.get('/', async (req, res) => {
   // r
   try {
     const queryCondition = { userId: req.user._id }
-    if(!req.query.filterByCategory)req.query.filterByCategory="all"
+    if (!req.query.filterByCategory)req.query.filterByCategory = 'all'
     const categoryList = await Category.find().lean().sort({ _id: 1 })
-    for(let category of categoryList){
-      if(category.name===req.query.filterByCategory){
-        category.selected='selected'
-        queryCondition.categoryId=category._id
+    for (const category of categoryList) {
+      if (category.name === req.query.filterByCategory) {
+        category.selected = 'selected'
+        queryCondition.categoryId = category._id
       }
     }
     const searchResults = await Record.find(queryCondition).populate(['userId', 'categoryId']).lean().sort({ date: -1 })
