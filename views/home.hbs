@@ -1,31 +1,42 @@
+<!-- Filter -->
 <form action="/" id="filterForm">
   <fieldset>
-    <div class="form-group">
-      <label for="exampleSelect1"><legend>篩選</legend></label>
-      <select class="form-select" id="filterSelect" name="filterByCategory" >
+    <div class="form-group d-flex">
+      <select  id="filterSelect" name="filterByCategory" >
         <option value="all">全部</option>
         {{#each categoryList}}
           <option {{this.selected}}><i class="{{this.iconClass}}"></i>{{this.name}}</option>
         {{/each}}
       </select>
+      <a class="btn btn-success ms-auto" href="/record/new">create a new record</a>
     </div>
   </fieldset>
 </form>
-
 <br/>
-
-<ul class="list-group">
+<!-- Record List -->
+<ul class="list-group border border-primary" >
   {{#each searchResults}}
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    
-    <i class="{{this.categoryId.iconClass}}"></i>
-    name:{{this.name}}~~date:{{this.date}}~~amount{{this.amount}}~~category{{this.categoryId.name}}
+  <li class="list-group-item d-flex justify-content-between align-items-center border border-primary "> 
+    <i class="{{this.categoryId.iconClass}} me-4"></i>
+    <figure class=" mb-0">
+      <blockquote class="blockquote ">
+        <p class="mb-0">{{this.name}}</p>
+      </blockquote>
+      <figcaption class="blockquote-footer mb-0">
+        {{this.date}} 
+      </figcaption>
+    </figure>
+    <h4 class="ms-auto text-end">{{this.amount}}</h4>
     <div class="ms-auto">
-    <a href="" type="button" class="btn btn-primary btn-sm">Edit</a>
-    <a href="" type="button" class="btn btn-danger btn-sm">Delete</a>
+    <form action="/record/{{this._id}}?_method=DELETE" method="POST">
+      <a href="/record/{{this._id}}/edit" class="btn btn-warning btn-sm">Edit</a>
+      <button href="" type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </form>
     </div>
   </li>
   {{/each}}
 </ul>
+<br/>
 
 <script src="/javascript/homePageJs.js"></script>
+
