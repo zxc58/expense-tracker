@@ -19,14 +19,14 @@ router.post('/signup', userValidationGuard, async (req, res) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      // return res.status(400).json({ errors: errors.array() });//
+      return res.status(400).json({ errors: errors.array() })
     }
-    const searchResult = await User.findOne({ email: req.newUser.email })
+    const searchResult = await User.findOne({ email: req.body.email })
     if (searchResult) { return res.send('name has sign up') }
     const salt = bcrypt.genSaltSync(10)
-    const hashPassword = bcrypt.hashSync(req.newUser.password, salt)
-    req.newUser.password = hashPassword
-    await User.create(req.newUser)
+    const hashPassword = bcrypt.hashSync(req.body.password, salt)
+    req.body.password = hashPassword
+    await User.create(req.body)
     return res.redirect('/')
   } catch (error) {
     console.log(error)
