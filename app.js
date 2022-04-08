@@ -11,7 +11,6 @@ const flash = require('connect-flash')
 const usePassport = require('./config/passport')
 const router = require('./routes/index')
 const app = express()
-const port = parseInt(process.env.port)
 //
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -33,6 +32,6 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use('/', router)
 
-app.listen(port, () => {
-  console.log(`http://localhost:${port}`)
+app.listen(process.env.PORT, () => {
+  console.log(`http://localhost:${process.env.PORT}`)
 })
