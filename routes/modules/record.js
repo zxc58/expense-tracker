@@ -17,14 +17,14 @@ router.post('/', recordValidationGuard, async (req, res) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
+      return res.status(500).json({ errors: errors.array() })
     }
     req.body.userId = req.user._id
     await Record.create(req.body)
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    return res.status(400).send('發生錯誤')
+    return res.status(500).render('error')
   }
 })
 router.get('/:_id/edit', async (req, res) => {
@@ -36,7 +36,7 @@ router.get('/:_id/edit', async (req, res) => {
     const searchResult = await Record.findOne({ _id, userId }).populate(['userId', 'categoryId']).lean()
     const categoryList = await Category.find().lean().sort({ _id: 1 })
     if (!searchResult) {
-      return res.status(400).send('發生錯誤')
+      return res.status(500).render('error')
     }
     searchResult.date = dateTransform(searchResult.date)
     for (const category of categoryList) {
@@ -49,25 +49,25 @@ router.get('/:_id/edit', async (req, res) => {
     return res.render('record')
   } catch (error) {
     console.log(error)
-    return res.status(400).send('發生錯誤')
+    return res.status(500).render('error')
   }
 })
 router.put('/:_id', recordValidationGuard, async (req, res) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })//
+      return res.status(500).json({ errors: errors.array() })//
     }
     const _id = req.params._id
     const userId = req.user._id
     const searchResult = await Record.findOneAndUpdate({ _id, userId }, req.newRecord)
     if (!searchResult) {
-      return res.status(400)
+      return res.status(500).render('error')
     }
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    return res.status(400).send('發生錯誤')
+    return res.status(500).render('error')
   }
 })
 router.delete('/:_id', async (req, res) => {
@@ -76,12 +76,12 @@ router.delete('/:_id', async (req, res) => {
     const userId = req.user._id
     const searchResults = await Record.findOneAndDelete({ _id, userId })
     if (!searchResults) {
-      return res.status(400).send('發生錯誤')
+      return res.status(500).render('error')
     }
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    return res.status(400).send('發生錯誤')
+    return res.status(500).render('error')
   }
 })
 //

@@ -19,7 +19,7 @@ router.post('/signup', antiAuthenticator, userValidationGuard, async (req, res) 
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
+      return res.status(500).json({ errors: errors.array() })
     }
     const searchResult = await User.findOne({ email: req.body.email })
     if (searchResult) {
@@ -33,7 +33,7 @@ router.post('/signup', antiAuthenticator, userValidationGuard, async (req, res) 
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    res.redirect('/')
+    return res.status(500).render('error')
   }
 })
 router.get('/signout', (req, res) => {

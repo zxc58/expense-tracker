@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
     res.render('home')
   } catch (error) {
     console.log(error)
-    res.redirect('/')
+    return res.status(500).render('error')
   }
 })
 //
