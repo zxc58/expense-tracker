@@ -20,7 +20,6 @@ router.post('/', recordValidationGuard, async (req, res) => {
       return res.status(400).json({ errors: errors.array() })
     }
     req.body.userId = req.user._id
-    console.log(req.body)
     await Record.create(req.body)
     return res.redirect('/')
   } catch (error) {

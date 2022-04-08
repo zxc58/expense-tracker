@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs')
 const { validationResult } = require('express-validator')
 //
 router.get('/signin', (req, res) => {
+  
   res.render('signin')
 })
 router.post('/signin', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/user/signin' }))
@@ -22,7 +23,10 @@ router.post('/signup', userValidationGuard, async (req, res) => {
       return res.status(400).json({ errors: errors.array() })
     }
     const searchResult = await User.findOne({ email: req.body.email })
-    if (searchResult) { return res.send('name has sign up') }
+    if (searchResult) { 
+      req.flash("warningMessage",'email 已被註冊')
+      return res.redirect("/user/signup")
+    }
     const salt = bcrypt.genSaltSync(10)
     const hashPassword = bcrypt.hashSync(req.body.password, salt)
     req.body.password = hashPassword
@@ -30,12 +34,13 @@ router.post('/signup', userValidationGuard, async (req, res) => {
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    res.redirect('/user/signup')
+    res.redirect('/')
   }
 })
 router.get('/signout', (req, res) => {
   req.logout()
-  res.redirect('/')
+  req.flash("successMessage",'登出成功')
+  res.redirect('/user/signin')
 })
 //
 module.exports = router
