@@ -5,7 +5,7 @@ const Record = require('../../models/record')
 const Category = require('../../models/category')
 const { recordValidationGuard } = require('../../middleWare')
 const { validationResult } = require('express-validator')
-const {dateTransform} = require('../../myFunction')
+const { dateTransform } = require('../../myFunction')
 //
 router.get('/new', async (req, res) => {
   res.locals.title = 'New Record'
@@ -24,7 +24,7 @@ router.post('/', recordValidationGuard, async (req, res) => {
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    return res.send('錯誤page')
+    return res.status(400).send('發生錯誤')
   }
 })
 router.get('/:_id/edit', async (req, res) => {
@@ -33,12 +33,12 @@ router.get('/:_id/edit', async (req, res) => {
     const userId = req.user._id
     res.locals.title = 'Edit Record'
     res.locals.action = `/record/${_id}?_method=PUT`
-    const searchResult = await Record.findOne({ _id,userId }).populate(['userId', 'categoryId']).lean()
+    const searchResult = await Record.findOne({ _id, userId }).populate(['userId', 'categoryId']).lean()
     const categoryList = await Category.find().lean().sort({ _id: 1 })
     if (!searchResult) {
-      return res.send('錯誤page')
+      return res.status(400).send('發生錯誤')
     }
-    searchResult.date=dateTransform(searchResult.date)
+    searchResult.date = dateTransform(searchResult.date)
     for (const category of categoryList) {
       if (category.name === searchResult.categoryId.name) {
         category.selected = 'selected'
@@ -49,14 +49,14 @@ router.get('/:_id/edit', async (req, res) => {
     return res.render('record')
   } catch (error) {
     console.log(error)
-    return res.send('錯誤page')
+    return res.status(400).send('發生錯誤')
   }
 })
 router.put('/:_id', recordValidationGuard, async (req, res) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-       return res.status(400).json({ errors: errors.array() });//
+      return res.status(400).json({ errors: errors.array() })//
     }
     const _id = req.params._id
     const userId = req.user._id
@@ -67,7 +67,7 @@ router.put('/:_id', recordValidationGuard, async (req, res) => {
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    return res.send('錯誤page')
+    return res.status(400).send('發生錯誤')
   }
 })
 router.delete('/:_id', async (req, res) => {
@@ -76,12 +76,12 @@ router.delete('/:_id', async (req, res) => {
     const userId = req.user._id
     const searchResults = await Record.findOneAndDelete({ _id, userId })
     if (!searchResults) {
-      return res.send('錯誤page')
+      return res.status(400).send('發生錯誤')
     }
     return res.redirect('/')
   } catch (error) {
     console.log(error)
-    return res.send('錯誤page')
+    return res.status(400).send('發生錯誤')
   }
 })
 //

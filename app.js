@@ -20,12 +20,12 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 usePassport(app)
-app.use(flash(),(req, res, next) => {
-  res.locals.successMessage = req.flash('successMessage')  
-  res.locals.warningMessage = req.flash('warningMessage')  
+app.use(flash(), (req, res, next) => {
+  res.locals.successMessage = req.flash('successMessage')
+  res.locals.warningMessage = req.flash('warningMessage')
   next()
-})  
-//app.use()
+})
+// app.use()
 app.use(express.static('public'))
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
