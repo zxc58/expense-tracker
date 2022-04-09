@@ -31,10 +31,10 @@ router.get('/:_id/edit', async (req, res) => {
   try {
     const _id = req.params._id
     const userId = req.user._id
-    res.locals.title = 'Edit Record'
-    res.locals.action = `/record/${_id}?_method=PUT`
-    const searchResult = await Record.findOne({ _id, userId }).populate(['userId', 'categoryId']).lean()
-    const categoryList = await Category.find().lean().sort({ _id: 1 })
+    const [searchResult, categoryList] = await Promise.all([
+      Record.findOne({ _id, userId }).populate(['userId', 'categoryId']).lean(),
+      Category.find().lean().sort({ _id: 1 })
+    ])
     if (!searchResult) {
       return res.status(500).render('error')
     }
@@ -44,6 +44,8 @@ router.get('/:_id/edit', async (req, res) => {
         category.selected = 'selected'
       } else { category.selected = '' }
     }
+    res.locals.title = 'Edit Record'
+    res.locals.action = `/record/${_id}?_method=PUT`
     res.locals.searchResult = searchResult
     res.locals.categoryList = categoryList
     return res.render('record')
