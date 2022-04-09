@@ -7,18 +7,15 @@ const bcrypt = require('bcryptjs')
 function usePassport (app) {
   app.use(passport.initialize())
   app.use(passport.session())
-  // 這邊設定登入策略
   passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true },
     async (req, email, password, done) => {
       try {
         const searchDbResult = await User.findOne({ email })
         if (!searchDbResult) {
-          // req.flash('warningMessage','此email沒被註冊')
           return done(null, false, req.flash('warningMessage', '此email沒被註冊'))
         }
         const passwordCompareResult = await bcrypt.compare(password, searchDbResult.password)
         if (!passwordCompareResult) {
-          // req.flash('warningMessage','密碼錯誤')
           return done(null, false, req.flash('warningMessage', '密碼錯誤'))
         }
         return done(null, searchDbResult)

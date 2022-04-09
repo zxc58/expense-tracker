@@ -7,7 +7,6 @@ const db = require('../../config/mongoose')
 const Record = require('../record')
 const User = require('../user')
 const Category = require('../category')
-
 const { userList, recordList } = require('../../allSeed.json')
 //
 db.once('open', () => {
@@ -16,12 +15,10 @@ db.once('open', () => {
     Promise.all([User.create(userList), Category.find().sort({ _id: 1 })])
       .then(resultArray => {
         const [userArray, categoryArray] = resultArray
-        // 處理recordList,將userId categoryId 換上ObjectId
         recordList.forEach(record => {
           record.userId = userArray[record.userId - 1]._id
           record.categoryId = categoryArray[record.categoryId - 1]._id
         })
-        //
         Record.create(recordList)
           .then(() => {
             console.log('Seeding records/users success')

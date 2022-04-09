@@ -25,7 +25,6 @@ app.use(flash(), (req, res, next) => {
   res.locals.warningMessage = req.flash('warningMessage')
   next()
 })
-// app.use()
 app.use(express.static('public'))
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')

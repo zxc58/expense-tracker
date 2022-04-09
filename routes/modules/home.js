@@ -3,10 +3,9 @@ const express = require('express')
 const router = express.Router()
 const Record = require('../../models/record')
 const Category = require('../../models/category')
-const { dateTransform } = require('../../myFunction')
+const moment = require('moment')
 //
 router.get('/', async (req, res) => {
-  // r
   try {
     const findCondition = { userId: req.user._id }
     let totalAmount = 0
@@ -20,7 +19,7 @@ router.get('/', async (req, res) => {
     }
     const recordList = await Record.find(findCondition).populate(['userId', 'categoryId']).lean().sort({ date: -1 })
     for (const record of recordList) {
-      record.date = dateTransform(record.date)
+      record.date = moment(record.date).format('YYYY-MM-DD')
       totalAmount += record.amount
     }
     res.locals.totalAmount = totalAmount

@@ -5,7 +5,7 @@ const Record = require('../../models/record')
 const Category = require('../../models/category')
 const { recordValidationGuard } = require('../../middleWare')
 const { validationResult } = require('express-validator')
-const { dateTransform } = require('../../myFunction')
+const moment = require('moment')
 //
 router.get('/new', async (req, res) => {
   res.locals.title = 'New Record'
@@ -38,7 +38,7 @@ router.get('/:_id/edit', async (req, res) => {
     if (!searchResult) {
       return res.status(500).render('error')
     }
-    searchResult.date = dateTransform(searchResult.date)
+    searchResult.date = moment(searchResult.date).format('YYYY-MM-DD')
     for (const category of categoryList) {
       if (category.name === searchResult.categoryId.name) {
         category.selected = 'selected'
@@ -56,7 +56,7 @@ router.put('/:_id', recordValidationGuard, async (req, res) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(500).json({ errors: errors.array() })//
+      return res.status(500).json({ errors: errors.array() })
     }
     const _id = req.params._id
     const userId = req.user._id
