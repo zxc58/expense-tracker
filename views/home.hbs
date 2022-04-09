@@ -5,7 +5,7 @@
       <select  id="filterSelect" name="filterByCategory" >
         <option value="all">全部</option>
         {{#each categoryList}}
-          <option {{this.selected}}><i class="{{this.iconClass}}"></i>{{this.name}}</option>
+          <option {{this.selected}} value="{{this._id}}"><i class="{{this.iconClass}}"></i>{{this.name}}</option>
         {{/each}}
       </select>
       <a class="btn btn-success ms-auto" href="/record/new">create a new record</a>

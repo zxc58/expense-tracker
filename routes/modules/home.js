@@ -9,10 +9,10 @@ router.get('/', async (req, res) => {
   try {
     const findCondition = { userId: req.user._id }
     let totalAmount = 0
-    if (!req.query.filterByCategory)req.query.filterByCategory = 'all'
+    //if (!req.query.filterByCategory)req.query.filterByCategory = 'all'
     const categoryList = await Category.find().lean().sort({ _id: 1 })
     for (const category of categoryList) {
-      if (category.name === req.query.filterByCategory) {
+      if (category._id == req.query.filterByCategory) {
         category.selected = 'selected'
         findCondition.categoryId = category._id
       } else { category.selected = '' }
