@@ -60,7 +60,7 @@ router.put('/:_id', recordValidationGuard, async (req, res) => {
     }
     const _id = req.params._id
     const userId = req.user._id
-    const searchResult = await Record.findOneAndUpdate({ _id, userId }, req.newRecord)
+    const searchResult = await Record.findOneAndUpdate({ _id, userId }, req.body)
     if (!searchResult) {
       return res.status(500).render('error')
     }
